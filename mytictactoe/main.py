@@ -1,26 +1,18 @@
-#field = [['', '', ', '],
-#         ['', '', ', '],
-#         ['', '', ', ']]
-#print(field)
-
-
-#print(field)
-
-#print(*field) #оператор распаковки
-
-#print('  0 1 2')
-#for i in range(len(field)):
-#    print(str(i), *field[i])
-
-#print('  0 1 2')
-#for i in range(len(field)):
-#    print(str(i)+' '+' '.join(field[i]))
-
-#num = '  a b c'
-#print(num)
-#for row, i in zip(field, num.split()):
-#    print(f"{i} {' '.join(str(j) for j in row)}")
-
+print("****Добро пожаловать в игру 'Крестики нолики!'****")
+print("---------------------------------------------------")
+print("ПРАВИЛА ИГРЫ: ")
+print("------------------------------")
+print("Игроки делают ходы по очереди добиваясь "
+      "заполнения трех подряд идущих клеток,"
+      "которые могут располагаться по горизонтали, "
+      "вертикали или диагонали.")
+print("------------------------------------------------")
+print("Чтобы сделать ход необходимо через пробел ввести"
+      " две координаты клетки через пробел.")
+print("Сначала вводится номер строки, затем номер столбца.")
+print("---------------------------------------------------")
+print("Удачи!")
+print()
 def show_field(f):                                      #функция первичного показа поля
     print('  0 1 2')
     for i in range(len(field)):
@@ -31,27 +23,27 @@ def users_input(f):                                     #функция взаи
     while True:
         place = input('Введите координаты: ').split()
         if len(place) != 2:
-            print("Введите две координаты")
+            print("Неверный ввод, ведите две координаты!")
             continue
 
         if not(place[0].isdigit() and place[1].isdigit()):
-            print("Введите числа")
+            print("Неверный ввод, ведите числа!")
             continue
 
         x, y = map(int, place)
 
         if not(x >= 0 and x < 3 and y >= 0 and y < 3):
-            print("Вы вышли из диапазона")
+            print("Ой, Вы вышли из диапазона координат клеток =(")
             continue
 
         if f[x][y] != '-':
-            print('Клетка уже занята')
+            print('К сожалению, клетка уже занята =(')
             continue
 
         break
     return x, y
 
-def win_v1(f, user):
+def win(f, user):                                     #функция определения победителя
     def check_line(a1, a2, a3, user):
         if a1 == 'X' and a2 == 'X' and a3 == 'X':
             return True
@@ -60,29 +52,6 @@ def win_v1(f, user):
         check_line(f[0][n], f[1][n], f[2][n], user) or \
             check_line(f[0][0], f[1][1], f[2][2], user) or \
         check_line(f[n][0], f[n][1], f[n][2], user):
-            return True
-    return False
-
-def win_v2(f, user):
-    win_cord = (((0, 0), (0, 1), (0, 2)), ((1, 0), (1, 1), (1, 2)), ((2, 0), (2, 1), (2, 2)),
-                ((0, 2), (1, 1), (2, 0)), ((0, 0), (1, 1), (2, 2)), ((0, 0), (1, 0), (2, 0)),
-                ((0, 1), (1, 1), (2, 1)), ((0, 2), (1, 2), (2, 2)))
-    for cord in win_cord:
-        symbols = []
-        for c in cord:
-            symbols.append(f[c[0]][c[1]])
-            if symbols == [user, user, user]:
-                return True
-        return False
-
-def win_v3(f, user):
-    f_list = []
-    for l in f:
-        f_list += 1
-    positions = [[0, 1, 2], [3, 4, 5], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]]
-    indexes = set([i for i, x in enumerate(f_list) if x == user])
-    for p in positions:
-        if len(indexes.intersection(set(p))) == 3:
             return True
     return False
 
@@ -102,9 +71,9 @@ while True:
     show_field(field)
     x, y = users_input(field)
     field[x][y] = user
-    if win_v2(field, user):
+    if win(field, user):
         show_field(field)
-        print(f"Выиграл {user}")
+        print(f"Выиграл игрок {user} поздравляем!")
         break
     count += 1
 
